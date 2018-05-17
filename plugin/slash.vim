@@ -26,6 +26,7 @@ function! s:wrap(seq)
   endif
   silent! autocmd! slash
   set hlsearch
+  let s:save_reg = @"
   return a:seq."\<plug>(slash-trailer)"
 endfunction
 
@@ -63,7 +64,12 @@ function! s:trailer_on_leave()
 endfunction
 
 function! s:escape(backward)
-  return '\V'.substitute(escape(@", '\' . (a:backward ? '?' : '/')), "\n", '\\n', 'g')
+  let command = '\V'.substitute(escape(@", '\' . (a:backward ? '?' : '/')), "\n", '\\n', 'g')
+  if exists('s:save_reg')
+    let @" = s:save_reg
+    unlet! s:save_reg
+  endif
+  return command
 endfunction
 
 function! slash#blink(times, delay)
