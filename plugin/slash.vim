@@ -25,7 +25,9 @@ function! s:wrap(seq)
     return a:seq
   endif
   silent! autocmd! slash
-  set hlsearch
+  if exists('s:save_search')
+    let @/ = s:save_search
+  endif
   let s:save_reg = @"
   return a:seq."\<plug>(slash-trailer)"
 endfunction
@@ -38,8 +40,10 @@ endfunction
 function! s:trailer()
   augroup slash
     autocmd!
-    autocmd CursorMoved,CursorMovedI * set nohlsearch | autocmd! slash
+    autocmd CursorMoved,CursorMovedI * let @/ = '' | autocmd! slash
   augroup END
+
+  let s:save_search = @/
 
   let seq = foldclosed('.') != -1 ? 'zv' : ''
   if exists('s:winline')
