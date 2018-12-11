@@ -7,6 +7,20 @@ in Vim.
 - Automatically clears search highlight when cursor is moved
 - Improved star-search (visual-mode, highlighting without moving)
 
+This fork's differences
+-----------------------
+
+- Merges [this](https://github.com/junegunn/vim-slash/pull/16) pull request,
+fixing a long-standing [issue](https://github.com/junegunn/vim-slash/issues/14)
+with visual star search.
+- Saves and clears the search register instead of setting `nohlsearch` to turn
+off highlighting when the cursor moves. This allows neovim's
+[`inccommand`](https://neovim.io/doc/user/options.html#'inccommand') option to
+be used along with this plugin.
+- Removes cursor blinking functionality, as it's reportedly
+[broken](https://github.com/junegunn/vim-slash/issues/17) in neovim and does
+not benefit vim-slash's feature set.
+
 Installation
 ------------
 
