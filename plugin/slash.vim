@@ -45,8 +45,10 @@ endfunction
 function! s:trailer()
   augroup slash
     autocmd!
-    autocmd CursorMoved,CursorMovedI * call SlashClearSearch() | autocmd! slash
+    autocmd CursorMoved,CursorMovedI * let @/ = '' | autocmd! slash
   augroup END
+
+  let s:save_search = @/
 
   let seq = foldclosed('.') != -1 ? 'zv' : ''
   if exists('s:winline')
