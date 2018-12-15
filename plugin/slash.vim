@@ -20,6 +20,11 @@
 " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 " THE SOFTWARE.
 
+function! SlashClearSearch()
+  let s:save_search = @/
+  let @/ = ''
+endfunction
+
 function! s:wrap(seq)
   if mode() == 'c' && stridx('/?', getcmdtype()) < 0
     return a:seq
@@ -40,10 +45,8 @@ endfunction
 function! s:trailer()
   augroup slash
     autocmd!
-    autocmd CursorMoved,CursorMovedI * let @/ = '' | autocmd! slash
+    autocmd CursorMoved,CursorMovedI * call SlashClearSearch() | autocmd! slash
   augroup END
-
-  let s:save_search = @/
 
   let seq = foldclosed('.') != -1 ? 'zv' : ''
   if exists('s:winline')
