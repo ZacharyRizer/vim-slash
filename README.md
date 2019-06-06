@@ -17,8 +17,8 @@ with visual star search.
 off highlighting when the cursor moves. This allows neovim's
 [`inccommand`](https://neovim.io/doc/user/options.html#'inccommand') option to
 be used along with this plugin.
-- Removes cursor blinking functionality, as it's reportedly
-[broken](https://github.com/junegunn/vim-slash/issues/17) in neovim and does
+- Removes cursor blinking functionality, ~as it's reportedly
+[broken](https://github.com/junegunn/vim-slash/issues/17) in neovim~ and it does
 not benefit vim-slash's feature set.
 - Exposes search clearing functionality as `SlashClearSearch()`. This can be
 called after a substitute command in which some matches are skipped,
