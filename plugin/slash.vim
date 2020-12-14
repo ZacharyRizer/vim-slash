@@ -70,8 +70,6 @@ inoremap        <plug>(slash-prev)    <nop>
 cmap <expr> <cr> <sid>wrap("\<cr>")
 map  <expr> n    <sid>wrap('n')
 map  <expr> N    <sid>wrap('N')
-" map  <expr> gd   <sid>wrap('gd')
-" map  <expr> gD   <sid>wrap('gD')
 map  <expr> *    <sid>wrap(<sid>immobile('*'))
 map  <expr> #    <sid>wrap(<sid>immobile('#'))
 map  <expr> g*   <sid>wrap(<sid>immobile('g*'))
