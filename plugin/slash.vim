@@ -1,25 +1,22 @@
 " Copyright (c) 2016 Junegunn Choi
 
-function! SlashClearSearch()
-  let s:save_search = @/
-  let @/ = ''
-endfunction
-
-function! s:wrap(seq)
-  if mode() == 'c' && stridx('/?', getcmdtype()) < 0
-    return a:seq
+function! s:escape(backward)
+  let command = '\V'.substitute(escape(@", '\' . (a:backward ? '?' : '/')), "\n", '\\n', 'g')
+  if exists('s:save_reg')
+    let @" = s:save_reg
+    unlet! s:save_reg
   endif
-  silent! autocmd! slash
-  if exists('s:save_search')
-    let @/ = s:save_search
-  endif
-  let s:save_reg = @"
-  return a:seq."\<plug>(slash-trailer)"
+  return command
 endfunction
 
 function! s:immobile(seq)
   let s:winline = winline()
+  let s:pos = getpos('.')
   return a:seq."\<plug>(slash-prev)"
+endfunction
+
+function! s:prev()
+  return getpos('.') == s:pos ? '' : '``'
 endfunction
 
 function! s:trailer()
@@ -52,20 +49,24 @@ function! s:trailer_on_leave()
   return ''
 endfunction
 
-function! s:escape(backward)
-  let command = '\V'.substitute(escape(@", '\' . (a:backward ? '?' : '/')), "\n", '\\n', 'g')
-  if exists('s:save_reg')
-    let @" = s:save_reg
-    unlet! s:save_reg
+function! s:wrap(seq)
+  if mode() == 'c' && stridx('/?', getcmdtype()) < 0
+    return a:seq
   endif
-  return command
+  silent! autocmd! slash
+  if exists('s:save_search')
+    let @/ = s:save_search
+  endif
+  let s:save_reg = @"
+  return a:seq."\<plug>(slash-trailer)"
 endfunction
 
 map      <expr> <plug>(slash-trailer) <sid>trailer()
 imap     <expr> <plug>(slash-trailer) <sid>trailer_on_leave()
 cnoremap        <plug>(slash-cr)      <cr>
-noremap         <plug>(slash-prev)    <c-o>
+noremap  <expr> <plug>(slash-prev)    <sid>prev()
 inoremap        <plug>(slash-prev)    <nop>
+noremap!        <plug>(slash-nop)     <nop>
 
 cmap <expr> <cr> <sid>wrap("\<cr>")
 map  <expr> n    <sid>wrap('n')
